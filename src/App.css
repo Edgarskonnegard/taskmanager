@@ -136,7 +136,33 @@
   color: #585858;;
 }
 
-
+.todo-info-div {
+  padding: 5px 5px 5px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-width: 10rem;
+  min-height: 10rem;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+.todo-info-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+.todo-info-head {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+}
 .todo-item {
   display: flex;
   align-items: center;

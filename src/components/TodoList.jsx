@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import TodoItem from './TodoItem'
 import TodoInput from './TodoInput';
 import MenuList from './MenuList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 function TodoList() {
     const [todos, setTodos] = useState(() => {
@@ -10,7 +12,10 @@ function TodoList() {
     });
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
+
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedTodoId, setSelectedTodoId] = useState(null);
 
     useEffect(() => {
         localStorage.setItem('todos', JSON.stringify(todos));
@@ -56,9 +61,18 @@ function TodoList() {
             setSelectedCategory(category);
         }
     };
+    const selectTodo = (id) => {
+        setSelectedTodoId(id);
+        setIsSelected(!isSelected);
+    };
+    const resetSelected = () => {
+        setIsSelected(false);
+        setSelectedTodoId(null);
+    };
 
     const categories = [...new Set(todos.map(todo => todo.category).filter(Boolean))];
     const filteredTodos = selectedCategory ? todos.filter(todo => todo.category === selectedCategory) : todos ;
+    const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
     const handleDrop = (e, inProgress, completed) => {
         e.preventDefault();
@@ -80,6 +94,25 @@ function TodoList() {
             onSelectedCategory={selectCategory}
             />
         <h1>Task manager</h1>
+        <div className='about-todo'>
+            {isSelected && (
+                <div className='todo-info-div'>
+                    <div className='todo-info-head'>
+                        <FontAwesomeIcon className='todo-info' icon={faInfoCircle}/>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                            className="close-btn"
+                            onClick={resetSelected}
+                        />
+                    </div>
+                    <div className='todo-info-content'>
+                        <p><strong>Name: </strong>{selectedTodo.name}</p>
+                        <p><strong>Category: </strong>{selectedTodo.category}</p>
+                        <p><strong>Description: </strong>{selectedTodo.description}</p>
+
+                    </div>
+                </div>)}
+        </div>
         <div className="todos">
             <div className="todo"
                 onDragOver={handleDragOver}
@@ -95,6 +128,7 @@ function TodoList() {
                     onToggle={toggleTodo}
                     onRemove={removeTodo}
                     onToggleInProgress={toggleInProgress}
+                    onSelectTodo={selectTodo}
                     />
                 ))}
             </div>
@@ -110,6 +144,7 @@ function TodoList() {
                     onToggle={toggleTodo}
                     onRemove={removeTodo}
                     onToggleInProgress={toggleInProgress}
+                    onSelectTodo={selectTodo}
                     />
                 ))}
             </div>
@@ -124,6 +159,7 @@ function TodoList() {
                     onToggle={toggleTodo}
                     onRemove={removeTodo}
                     onToggleInProgress={toggleInProgress}
+                    onSelectTodo={selectTodo}
                     />
                 ))}
             </div>
